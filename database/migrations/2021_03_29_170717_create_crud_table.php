@@ -13,8 +13,9 @@ class CreateCrudTable extends Migration
      */
     public function up()
     {
-        Schema::create('crud', function (Blueprint $table) {
+        Schema::create('cruds', function (Blueprint $table) {
             $table->id();
+            $table->text('text');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ class CreateCrudTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('crud');
+        Schema::dropIfExists('cruds');
     }
 }

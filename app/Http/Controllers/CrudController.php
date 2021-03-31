@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class CrudController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -20,10 +21,10 @@ class CrudController extends Controller
         // ];
 
         $data = collect([
-            "crud" => "Welcome to page \"crud\"",
-            "back" => "Back home"
+            "cruds"   => crud::all()
         ]);
-        return view('crud', compact('data'));
+
+        return view('crud.index', compact('data'));
     }
 
     /**
@@ -33,7 +34,7 @@ class CrudController extends Controller
      */
     public function create()
     {
-        //
+        return view('crud.create');
     }
 
     /**
@@ -44,7 +45,20 @@ class CrudController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'text' => 'required|max:255',
+        ]);
+
+        crud::create($data);
+
+        // $data = collect([
+        //     "cruds"   => crud::all()
+        // ]);
+
+        // return view('crud.index', compact('data'));
+        // return redirect()->route('crud', compact('data'));
+
+        return redirect()->route('crud');
     }
 
     /**
@@ -55,7 +69,7 @@ class CrudController extends Controller
      */
     public function show(crud $crud)
     {
-        //
+        return redirect()->route('crud');
     }
 
     /**
@@ -64,9 +78,11 @@ class CrudController extends Controller
      * @param  \App\Models\crud  $crud
      * @return \Illuminate\Http\Response
      */
-    public function edit(crud $crud)
+    public function edit(crud $crud, $id)
     {
-        //
+        $text = $crud->where('id', '=', $id)->get()[0]->text;
+
+        return view('crud.edit', compact('text', 'id'));
     }
 
     /**
@@ -78,7 +94,14 @@ class CrudController extends Controller
      */
     public function update(Request $request, crud $crud)
     {
-        //
+        $data = $request->validate([
+            'text' => 'required|max:255',
+            'id'   => 'required|numeric'
+        ]);
+
+        $crud->where('id', $data['id'])->update(['text' => $data['text']]);
+
+        return redirect()->route('crud');
     }
 
     /**
@@ -87,8 +110,10 @@ class CrudController extends Controller
      * @param  \App\Models\crud  $crud
      * @return \Illuminate\Http\Response
      */
-    public function destroy(crud $crud)
+    public function destroy(crud $crud, $id)
     {
-        //
+        $crud->where('id', $id)->delete();
+
+        return redirect()->route('crud');
     }
 }
