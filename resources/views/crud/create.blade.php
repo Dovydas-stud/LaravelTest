@@ -1,4 +1,4 @@
-<form method="POST" action="{{ route('crud') }}">
+<form method="POST" action="{{ route('crud.index') }}">
     @csrf
 
     <label for="formText">Text</label>

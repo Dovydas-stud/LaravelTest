@@ -15,14 +15,8 @@ class CrudController extends Controller
      */
     public function index()
     {
-        // $data = [
-        //     "Welcome to page \"crud\"",
-        //     "Back home"
-        // ];
 
-        $data = collect([
-            "cruds"   => crud::all()
-        ]);
+        $data = crud::all();
 
         return view('crud.index', compact('data'));
     }
@@ -51,14 +45,7 @@ class CrudController extends Controller
 
         crud::create($data);
 
-        // $data = collect([
-        //     "cruds"   => crud::all()
-        // ]);
-
-        // return view('crud.index', compact('data'));
-        // return redirect()->route('crud', compact('data'));
-
-        return redirect()->route('crud');
+        return redirect()->route('crud.index');
     }
 
     /**
@@ -69,7 +56,7 @@ class CrudController extends Controller
      */
     public function show(crud $crud)
     {
-        return redirect()->route('crud');
+        return redirect()->route('crud.index');
     }
 
     /**
@@ -78,11 +65,9 @@ class CrudController extends Controller
      * @param  \App\Models\crud  $crud
      * @return \Illuminate\Http\Response
      */
-    public function edit(crud $crud, $id)
+    public function edit(crud $crud)
     {
-        $text = $crud->where('id', '=', $id)->get()[0]->text;
-
-        return view('crud.edit', compact('text', 'id'));
+        return view('crud.edit', compact('crud'));
     }
 
     /**
@@ -96,12 +81,13 @@ class CrudController extends Controller
     {
         $data = $request->validate([
             'text' => 'required|max:255',
-            'id'   => 'required|numeric'
         ]);
 
-        $crud->where('id', $data['id'])->update(['text' => $data['text']]);
+        // $crud->where('id', $data['id'])->update(['text' => $data['text']]);
 
-        return redirect()->route('crud');
+        $crud->update($data);
+
+        return redirect()->route('crud.index');
     }
 
     /**
@@ -110,10 +96,10 @@ class CrudController extends Controller
      * @param  \App\Models\crud  $crud
      * @return \Illuminate\Http\Response
      */
-    public function destroy(crud $crud, $id)
+    public function destroy(crud $crud)
     {
-        $crud->where('id', $id)->delete();
+        $crud->delete();
 
-        return redirect()->route('crud');
+        return redirect()->route('crud.index');
     }
 }

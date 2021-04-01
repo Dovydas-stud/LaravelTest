@@ -1,15 +1,20 @@
 <h1>
     Edit
 </h1>
-<form method="POST" action="{{ route('crud') }}">
+<form method="POST" action="{{ route('crud.update', $crud->id) }}">
     @csrf
     @method('PUT')
-    <input type="hidden" name="id" value="{{ $id }}" autocomplete="off">
 
     <label for="formText">Text</label>
-    <input type="text" name="text" id="formText" value="{{ $text }}" autocomplete="off">
+    <input type="text" name="text" id="formText" value="{{ $crud->text }}" autocomplete="off">
 
     <button type="submit">Submit</button>
 </form>
 
-<a href="{{ route('crud_destroy', $id) }}" class="text-sm">!Delete this crud instead!</a>
+<form method="POST" action="{{ route('crud.destroy', $crud->id) }}">
+    @csrf
+    @method('DELETE')
+
+    <button type="submit" class="text-sm">!Delete this crud instead!</button>
+</form>
+
